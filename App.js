@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, AsyncStorage, TouchableOpacity } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 
 import * as Font from 'expo-font';
@@ -14,12 +14,13 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 import apolloClientOptions from './apollo';
 import styles from './styles';
+import NavController from './components/NavController';
+import { AuthProvider } from './AuthContext';
 
 export default function App() {
   // 처음 컴포넌트를 로드했을 때, loaded는 false, client는 null이 됨
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // true: in / false: out / null: not checked
 
   const preLoad = async () => {
     try {
@@ -39,12 +40,6 @@ export default function App() {
         cache,
         ...apolloClientOptions,
       });
-      const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-      if (isLoggedIn === null || isLoggedIn === 'false') {
-        setIsLoggedIn(false);
-      } else {
-        setIsLoggedIn(true);
-      }
       setLoaded(true);
       setClient(client);
     } catch (e) {
@@ -57,40 +52,12 @@ export default function App() {
     preLoad();
   }, []);
 
-  const logUserIn = async () => {
-    try {
-      await AsyncStorage.setItem('isLoggedIn', 'true');
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const logUserOut = async () => {
-    try {
-      await AsyncStorage.setItem('isLoggedIn', 'false'); // only string
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return loaded && client && isLoggedIn !== null ? (
+  return loaded && client ? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={styles}>
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-          {isLoggedIn === true ? (
-            <TouchableOpacity onPress={logUserOut}>
-              <Text>Log Out</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={logUserIn}>
-              <Text>Log In</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        <AuthProvider>
+          <NavController />
+        </AuthProvider>
       </ThemeProvider>
     </ApolloProvider>
   ) : (
