@@ -14,6 +14,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import apolloClientOptions from './apollo';
 
 export default function App() {
+  // 처음 컴포넌트를 로드했을 때, loaded는 false, client는 null이 됨.
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null);
   const preLoad = async () => {
