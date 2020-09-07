@@ -3,8 +3,10 @@ import { AsyncStorage } from 'react-native';
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // true: in / false: out / null: not checked
+export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
+  // true: in / false: out / null: not checked
+  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp);
+
   const logUserIn = async () => {
     try {
       await AsyncStorage.setItem('isLoggedIn', 'true');
@@ -22,6 +24,7 @@ export const AuthProvider = ({ children }) => {
       console.log(error);
     }
   };
+
   return (
     <AuthContext.Provider value={{ isLoggedIn, logUserIn, logUserOut }}>
       {children}
@@ -30,16 +33,16 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useIsLoggedIn = () => {
-  const isLoggedIn = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   return isLoggedIn;
 };
 
 export const useLogIn = () => {
-  const { useLogIn } = useContext(AuthContext);
-  return useLogIn;
+  const { logUserIn } = useContext(AuthContext);
+  return logUserIn;
 };
 
 export const useLogOut = () => {
-  const { useLogOut } = useContext(AuthContext);
-  return useLogOut;
+  const { logUserOut } = useContext(AuthContext);
+  return logUserOut;
 };
