@@ -1,5 +1,7 @@
+import Constants from 'expo-constants';
+
 const options = {
-  uri: 'http://localhost:4000/graphql',
+  uri: `http://${Constants.manifest.debuggerHost.split(':').shift()}:4000`,
 };
 
 export default options;
