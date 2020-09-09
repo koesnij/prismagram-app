@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import constants from '../constants';
 
 const Container = styled.View`
+  width: 50%;
   margin-bottom: 10px;
 `;
 const TextInput = styled.TextInput`
-  width: ${constants.width / 2};
   padding: 10px;
   background-color: ${(props) => props.theme.greyColor};
   border: 1px solid ${(props) => props.theme.lightGreyColor};

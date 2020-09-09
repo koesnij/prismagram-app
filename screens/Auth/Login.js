@@ -41,7 +41,7 @@ export default ({ navigation }) => {
       } = await requestSecretMutation();
       if (requestSecret) {
         Alert.alert('Check your email.');
-        navigation.navigate('Confirm');
+        navigation.navigate('Confirm', { email: value });
         return;
       } else {
         Alert.alert('Invalid Account.');

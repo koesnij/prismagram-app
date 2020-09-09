@@ -1,15 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
 import { AsyncStorage } from 'react-native';
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
   // true: in / false: out / null: not checked
   const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp);
 
-  const logUserIn = async () => {
+  const logUserIn = async (token) => {
     try {
       await AsyncStorage.setItem('isLoggedIn', 'true');
+      await AsyncStorage.setItem('jwt', token);
       setIsLoggedIn(true);
     } catch (error) {
       console.log(error);

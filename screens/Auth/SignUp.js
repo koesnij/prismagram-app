@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import AuthButton from '../../components/AuthButton';
 
 const View = styled.View`

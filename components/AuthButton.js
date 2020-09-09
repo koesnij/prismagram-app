@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 import constants from '../constants';
 import { ActivityIndicator } from 'react-native';
 
-const Touchable = styled.TouchableOpacity``;
+const Touchable = styled.TouchableOpacity`
+  width: 50%;
+`;
 const Container = styled.View`
   background-color: ${(props) => props.theme.blueColor};
   padding: 10px;
   border-radius: 4px;
-  width: ${constants.width / 2};
 `;
 const Text = styled.Text`
   color: white;
