@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import AuthButton from '../../components/AuthButton';
 
 const View = styled.View`
   background-color: white;
@@ -12,6 +13,6 @@ const Text = styled.Text``;
 
 export default () => (
   <View>
-    <AuthButton onPress={() => null} text="Sign Up" />
+    <AuthButton onPress={() => null} text="Sign Up" loading={false} />
   </View>
 );

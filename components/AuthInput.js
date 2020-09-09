@@ -16,18 +16,24 @@ const TextInput = styled.TextInput`
 
 const AuthInput = ({
   placeholder,
-  keyboardType,
   value,
-  autoCapitalize,
   onChange,
+  onSubmitEditing = () => null,
+  autoCorrect = true,
+  keyboardType = 'default',
+  autoCapitalize = 'none',
+  returnKeyType = 'done',
 }) => (
   <Container>
     <TextInput
       placeholder={placeholder}
-      keyboardType={keyboardType}
       value={value}
-      autoCapitalize={autoCapitalize}
       onChangeText={onChange}
+      onSubmitEditing={onSubmitEditing}
+      autoCorrect={autoCorrect}
+      keyboardType={keyboardType}
+      autoCapitalize={autoCapitalize}
+      returnKeyType={returnKeyType}
     />
   </Container>
 );
@@ -44,6 +50,9 @@ AuthInput.propTypes = {
   ]),
   autoCapitalize: PropTypes.oneOf(['characters', 'words', 'sentences', 'none']),
   onChange: PropTypes.func.isRequired,
+  returnKeyType: PropTypes.oneOf(['done', 'go', 'next', 'search', 'send']),
+  onSubmitEditing: PropTypes.func,
+  autoCorrect: PropTypes.bool,
 };
 
 export default AuthInput;
