@@ -8,12 +8,12 @@ import Login from '../screens/Auth/Login';
 
 const AuthNavigation = createStackNavigator(
   {
+    Login,
     AuthHome,
     SignUp,
-    Login,
     Confirm,
   },
-  { initialRouteName: 'AuthHome', headerMode: 'none' }
+  { headerMode: 'none' }
 );
 
 export default createAppContainer(AuthNavigation);
