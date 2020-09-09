@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import constants from '../constants';
 
 const Container = styled.View`
-  width: 50%;
+  width: 65%;
   margin-bottom: 10px;
 `;
 const TextInput = styled.TextInput`
@@ -30,10 +30,10 @@ const AuthInput = ({
       value={value}
       onChangeText={onChange}
       onSubmitEditing={onSubmitEditing}
-      autoCorrect={autoCorrect}
       keyboardType={keyboardType}
-      autoCapitalize={autoCapitalize}
       returnKeyType={returnKeyType}
+      autoCorrect={autoCorrect}
+      autoCapitalize={autoCapitalize}
     />
   </Container>
 );

@@ -6,7 +6,7 @@ import constants from '../constants';
 import { ActivityIndicator } from 'react-native';
 
 const Touchable = styled.TouchableOpacity`
-  width: 50%;
+  width: 65%;
 `;
 const Container = styled.View`
   background-color: ${(props) => props.theme.blueColor};
