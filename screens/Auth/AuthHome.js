@@ -13,12 +13,13 @@ const View = styled.View`
 const Image = styled.Image`
   width: 45%;
   height: 10%;
+  margin-bottom: 10px;
 `;
 
 const Touchable = styled.TouchableOpacity``;
 const LoginLink = styled.View``;
 const LoginLinkText = styled.Text`
-  margin-top: 20px;
+  margin-top: 15px;
   color: ${(props) => props.theme.blueColor};
 `;
 
