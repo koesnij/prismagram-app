@@ -4,7 +4,7 @@ import { ThemeProvider } from 'styled-components';
 
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppLoading } from 'expo';
 
 import ApolloClient from 'apollo-boost';
@@ -27,7 +27,7 @@ export default function App() {
     try {
       // Ionicons, Asset(이미지) preload
       await Font.loadAsync({
-        ...Ionicons.font,
+        ...MaterialCommunityIcons.font,
       });
       await Asset.loadAsync(require('./assets/logo.png')); // 배경, 로고 등
       // Async Storage를 찾으면 cache로 가져옴 (restore)
