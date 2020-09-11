@@ -1,24 +1,44 @@
 import React from 'react';
+import { Image } from 'react-native';
+import Swiper from 'react-native-swiper';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Image } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const Container = styled.View``;
+import constants from '../../constants';
+
+const Container = styled.View`
+  background-color: white;
+`;
+
 const Header = styled.View`
   padding: 10px 5px;
   flex-direction: row;
   align-items: center;
 `;
+
+const HeaderColumn = styled.View`
+  margin-left: 10px;
+`;
+
 const Touchable = styled.TouchableOpacity``;
+
 const Bold = styled.Text`
   font-weight: 500;
 `;
+
 const Location = styled.Text`
   margin-top: 1px;
   font-size: 12px;
 `;
-const HeaderColumn = styled.View`
-  margin-left: 10px;
+
+const IconsContainer = styled.View`
+  padding: 10px;
+  flex-direction: row;
+  align-items: center;
+`;
+const IconContainer = styled.View`
+  margin-right: 10px;
 `;
 
 const Post = ({
@@ -28,7 +48,7 @@ const Post = ({
   caption,
   location,
   user,
-  files,
+  files = [],
   comments,
 }) => (
   <Container>
@@ -50,6 +70,28 @@ const Post = ({
         </Touchable>
       </HeaderColumn>
     </Header>
+    <Swiper style={{ height: constants.width }}>
+      {files &&
+        files.map((file) => (
+          <Image
+            style={{ width: constants.width, height: constants.width }}
+            key={file.id}
+            source={{ uri: file.url }}
+          />
+        ))}
+    </Swiper>
+    <IconsContainer>
+      <IconContainer>
+        <Touchable>
+          <MaterialCommunityIcons size={28} name={'heart-outline'} />
+        </Touchable>
+      </IconContainer>
+      <IconContainer>
+        <Touchable>
+          <MaterialCommunityIcons size={28} name={'chat-outline'} />
+        </Touchable>
+      </IconContainer>
+    </IconsContainer>
   </Container>
 );
 
