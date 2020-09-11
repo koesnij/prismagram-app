@@ -12,7 +12,7 @@ const Container = styled.View`
 `;
 
 const Header = styled.View`
-  padding: 10px 5px;
+  padding: 10px 0px;
   flex-direction: row;
   align-items: center;
 `;
@@ -33,12 +33,26 @@ const Location = styled.Text`
 `;
 
 const IconsContainer = styled.View`
-  padding: 10px;
+  margin-bottom: 7px;
   flex-direction: row;
   align-items: center;
 `;
+
 const IconContainer = styled.View`
   margin-right: 10px;
+`;
+
+const InfoContainer = styled.View`
+  padding: 10px;
+`;
+
+const Caption = styled.Text`
+  margin: 3px 0px;
+`;
+
+const CommentCount = styled.Text`
+  opacity: 0.5;
+  font-size: 13px;
 `;
 
 const Post = ({
@@ -80,18 +94,31 @@ const Post = ({
           />
         ))}
     </Swiper>
-    <IconsContainer>
-      <IconContainer>
-        <Touchable>
-          <MaterialCommunityIcons size={28} name={'heart-outline'} />
-        </Touchable>
-      </IconContainer>
-      <IconContainer>
-        <Touchable>
-          <MaterialCommunityIcons size={28} name={'chat-outline'} />
-        </Touchable>
-      </IconContainer>
-    </IconsContainer>
+    <InfoContainer>
+      <IconsContainer>
+        <IconContainer>
+          <Touchable>
+            <MaterialCommunityIcons size={28} name={'heart-outline'} />
+          </Touchable>
+        </IconContainer>
+        <IconContainer>
+          <Touchable>
+            <MaterialCommunityIcons size={28} name={'chat-outline'} />
+          </Touchable>
+        </IconContainer>
+      </IconsContainer>
+      <Touchable>
+        <Bold>{likeCount} likes</Bold>
+      </Touchable>
+      <Touchable>
+        <Caption>
+          <Bold>{user.username}</Bold> {caption}
+        </Caption>
+      </Touchable>
+      <Touchable>
+        <CommentCount>See all {comments.length} comments</CommentCount>
+      </Touchable>
+    </InfoContainer>
   </Container>
 );
 
