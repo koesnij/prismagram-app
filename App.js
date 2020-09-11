@@ -36,8 +36,19 @@ export default function App() {
         cache,
         storage: AsyncStorage,
       });
+
+      // const token = await AsyncStorage.getItem('jwt');
+      // mount 될 때만 수행하므로 로그인 후에 토큰을 불러올 수 없음.
+
       // 클라이언트를 생성
       const client = new ApolloClient({
+        request: async (operation) => {
+          // 요청할 때 마다 이 함수가 실행된다
+          const token = await AsyncStorage.getItem('jwt');
+          return operation.setContext({
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        },
         cache,
         ...apolloClientOptions,
       });
