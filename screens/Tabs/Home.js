@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Loader from '../../components/Loader';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
+import Post from './Post';
 
 const FEED_QUERY = gql`
   {
@@ -35,14 +36,6 @@ const FEED_QUERY = gql`
   }
 `;
 
-const View = styled.View`
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-`;
-
-const Text = styled.Text``;
-
 export default () => {
   const { loading, data, refetch } = useQuery(FEED_QUERY); // persistCache 동작
   const [refreshing, setRefreshing] = useState(false);
@@ -62,7 +55,13 @@ export default () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      {loading ? <Loader /> : <Text>Hello</Text>}
+      {loading ? (
+        <Loader />
+      ) : (
+        data &&
+        data.seeFeed &&
+        data.seeFeed.map((post) => <Post key={post.id} {...post} />)
+      )}
     </ScrollView>
   );
 };
