@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image } from 'react-native';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 
 import constants from '../../constants';
+import styles from '../../styles';
 
 const Container = styled.View`
   background-color: white;
+  padding-bottom: 10px;
 `;
 
 const Header = styled.View`
@@ -47,7 +51,7 @@ const InfoContainer = styled.View`
 `;
 
 const Caption = styled.Text`
-  margin: 3px 0px;
+  margin: 5px 0px;
 `;
 
 const CommentCount = styled.Text`
@@ -55,72 +59,113 @@ const CommentCount = styled.Text`
   font-size: 13px;
 `;
 
+const TOGGLE_LIKE = gql`
+  mutation toggleLike($postId: String!) {
+    toggleLike(postId: $postId)
+  }
+`;
+
 const Post = ({
+  id,
   createdAt,
-  likeCount,
-  isLiked,
+  likeCount: _likeCount,
+  isLiked: _isLiked,
   caption,
   location,
   user,
   files = [],
   comments,
-}) => (
-  <Container>
-    <Header>
-      <HeaderColumn>
-        <Touchable>
-          <Image
-            style={{ height: 40, width: 40, borderRadius: 20 }}
-            source={{ uri: user.avatar }}
-          />
-        </Touchable>
-      </HeaderColumn>
-      <HeaderColumn>
-        <Touchable>
-          <Bold>{user.username}</Bold>
-        </Touchable>
-        <Touchable>
-          <Location>{location}</Location>
-        </Touchable>
-      </HeaderColumn>
-    </Header>
-    <Swiper style={{ height: constants.width }}>
-      {files &&
-        files.map((file) => (
-          <Image
-            style={{ width: constants.width, height: constants.width }}
-            key={file.id}
-            source={{ uri: file.url }}
-          />
-        ))}
-    </Swiper>
-    <InfoContainer>
-      <IconsContainer>
-        <IconContainer>
+}) => {
+  const [isLiked, setIsLiked] = useState(_isLiked);
+  const [likeCount, setLikeCount] = useState(_likeCount);
+  const [toggleLikeMutation] = useMutation(TOGGLE_LIKE, {
+    variables: { postId: id },
+  });
+
+  const toggleLike = async () => {
+    if (isLiked) {
+      setIsLiked(false);
+      setLikeCount(likeCount - 1);
+    } else {
+      setIsLiked(true);
+      setLikeCount(likeCount + 1);
+    }
+    try {
+      // try-catch로 감싸주기 & await 키워드
+      await toggleLikeMutation();
+    } catch (e) {}
+  };
+
+  return (
+    <Container>
+      <Header>
+        <HeaderColumn>
           <Touchable>
-            <MaterialCommunityIcons size={28} name={'heart-outline'} />
+            <Image
+              style={{ height: 40, width: 40, borderRadius: 20 }}
+              source={{ uri: user.avatar }}
+            />
           </Touchable>
-        </IconContainer>
-        <IconContainer>
+        </HeaderColumn>
+        <HeaderColumn>
           <Touchable>
-            <MaterialCommunityIcons size={28} name={'chat-outline'} />
+            <Bold>{user.username}</Bold>
           </Touchable>
-        </IconContainer>
-      </IconsContainer>
-      <Touchable>
-        <Bold>{likeCount} likes</Bold>
-      </Touchable>
-      <Touchable>
-        <Caption>
-          <Bold>{user.username}</Bold> {caption}
-        </Caption>
-      </Touchable>
-      <Touchable>
-        <CommentCount>See all {comments.length} comments</CommentCount>
-      </Touchable>
-    </InfoContainer>
-  </Container>
-);
+          <Touchable>
+            <Location>{location}</Location>
+          </Touchable>
+        </HeaderColumn>
+      </Header>
+      <Swiper style={{ height: constants.width }}>
+        {files &&
+          files.map((file) => (
+            <Image
+              style={{ width: constants.width, height: constants.width }}
+              key={file.id}
+              source={{ uri: file.url }}
+            />
+          ))}
+      </Swiper>
+      <InfoContainer>
+        <IconsContainer>
+          <IconContainer>
+            <Touchable onPress={toggleLike}>
+              <MaterialCommunityIcons
+                size={28}
+                color={isLiked ? styles.redColor : styles.blackColor}
+                name={isLiked ? 'heart' : 'heart-outline'}
+              />
+            </Touchable>
+          </IconContainer>
+          <IconContainer>
+            <Touchable>
+              <MaterialCommunityIcons
+                size={28}
+                color={styles.blackColor}
+                name={'chat-outline'}
+              />
+            </Touchable>
+          </IconContainer>
+        </IconsContainer>
+        <Touchable>
+          {likeCount === 1 ? (
+            <Bold>1 like</Bold>
+          ) : (
+            <Bold>{likeCount} likes</Bold>
+          )}
+        </Touchable>
+        <Touchable>
+          <Caption>
+            <Bold>{user.username}</Bold> {caption}
+          </Caption>
+        </Touchable>
+        <Touchable>
+          <CommentCount>See all {comments.length} comments</CommentCount>
+        </Touchable>
+      </InfoContainer>
+    </Container>
+  );
+};
 
 Post.propTypes = {
   id: PropTypes.string.isRequired,
