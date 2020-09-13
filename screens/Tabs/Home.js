@@ -37,7 +37,9 @@ const FEED_QUERY = gql`
 `;
 
 export default () => {
-  const { loading, data, refetch } = useQuery(FEED_QUERY); // persistCache 동작
+  const { loading, data, refetch } = useQuery(FEED_QUERY, {
+    fetchPolicy: 'network-only',
+  }); // persistCache 동작
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     try {
