@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, RefreshControl } from 'react-native';
-import styled from 'styled-components';
+import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { useQuery, gql } from '@apollo/react-hooks';
 
 import Loader from '../../../components/Loader';
 import SquarePhoto from '../../../components/SquarePhoto';
-
-const View = styled.View`
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-`;
-const Text = styled.Text``;
 
 const SEARCH = gql`
   query search($term: String!) {
@@ -36,7 +28,6 @@ const SEARCH = gql`
 `;
 
 const SearchPresenter = ({ term, shouldFetch }) => {
-  const [refreshing, setRefreshing] = useState(false);
   const { data, loading, refetch } = useQuery(SEARCH, {
     variables: {
       term,
@@ -44,8 +35,8 @@ const SearchPresenter = ({ term, shouldFetch }) => {
     skip: !shouldFetch,
     fetchPolicy: 'network-only', // 항상 네트워크에 요청 (캐시 사용 X)
   });
-  console.log(data, loading, shouldFetch);
 
+  const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     try {
       setRefreshing(true);
@@ -56,20 +47,25 @@ const SearchPresenter = ({ term, shouldFetch }) => {
     }
   };
 
+  const renderItem = ({ item }) => <SquarePhoto key={item.id} {...item} />;
+
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-      }
-    >
+    <>
       {loading ? (
         <Loader />
       ) : (
         data &&
-        data.searchPost &&
-        data.searchPost.map((post) => <SquarePhoto key={post.id} {...post} />)
+        data.searchPost && (
+          <FlatList
+            data={data.searchPost}
+            renderItem={renderItem}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
+            numColumns={3}
+          />
+        )
       )}
-    </ScrollView>
+    </>
   );
 };
 
