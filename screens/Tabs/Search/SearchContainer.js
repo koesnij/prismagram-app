@@ -1,19 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import SearchBar from '../../components/SearchBar';
-
-const View = styled.View`
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-`;
-
-const Text = styled.Text``;
+import SearchBar from '../../../components/SearchBar';
+import SearchPresenter from './SearchPresenter';
 
 export default class extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: (
+    headerTitle: () => (
       <SearchBar
         value={navigation.getParam('term', '')}
         onChange={navigation.getParam('onChange', () => null)}
@@ -21,11 +13,13 @@ export default class extends React.Component {
       />
     ),
   });
+
   constructor(props) {
     super(props);
     const { navigation } = props;
     this.state = {
       term: '',
+      shouldFetch: false,
     };
     navigation.setParams({
       term: this.state.term,
@@ -33,21 +27,19 @@ export default class extends React.Component {
       onSubmit: this.onSubmit,
     });
   }
+
   onChange = (text) => {
     const { navigation } = this.props;
-    this.setState({ term: text });
+    this.setState({ term: text, shouldFetch: false });
     navigation.setParams({
       term: text,
     });
   };
   onSubmit = () => {
-    console.log('Submit');
+    this.setState({ shouldFetch: true });
   };
   render() {
-    return (
-      <View>
-        <Text>Search</Text>
-      </View>
-    );
+    const { term, shouldFetch } = this.state;
+    return <SearchPresenter term={term} shouldFetch={shouldFetch} />;
   }
 }
