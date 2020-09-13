@@ -45,7 +45,6 @@ const SearchBar = ({ onChange, value, onSubmit }) => {
         placeholder={'Search'}
         placeholderTextColor={styles.darkGreyColor}
       />
-
       {isFocused && (
         <Touchable onPress={() => Keyboard.dismiss()}>
           <Text>Cancel</Text>

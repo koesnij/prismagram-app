@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, RefreshControl } from 'react-native';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useQuery, gql } from '@apollo/react-hooks';
+
+import Loader from '../../../components/Loader';
+import SquarePhoto from '../../../components/SquarePhoto';
 
 const View = styled.View`
   justify-content: center;
@@ -16,6 +19,7 @@ const SEARCH = gql`
     searchPost(term: $term) {
       id
       files {
+        id
         url
       }
       likeCount
@@ -38,6 +42,7 @@ const SearchPresenter = ({ term, shouldFetch }) => {
       term,
     },
     skip: !shouldFetch,
+    fetchPolicy: 'network-only', // 항상 네트워크에 요청 (캐시 사용 X)
   });
   console.log(data, loading, shouldFetch);
 
@@ -56,7 +61,15 @@ const SearchPresenter = ({ term, shouldFetch }) => {
       refreshControl={
         <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
       }
-    ></ScrollView>
+    >
+      {loading ? (
+        <Loader />
+      ) : (
+        data &&
+        data.searchPost &&
+        data.searchPost.map((post) => <SquarePhoto key={post.id} {...post} />)
+      )}
+    </ScrollView>
   );
 };
 
