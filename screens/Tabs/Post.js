@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Image } from 'react-native';
+import { withNavigation } from 'react-navigation';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -9,7 +10,6 @@ import { useMutation } from '@apollo/react-hooks';
 
 import constants from '../../constants';
 import styles from '../../styles';
-import { withNavigation } from 'react-navigation';
 
 const Container = styled.View`
   background-color: white;
@@ -72,6 +72,7 @@ const Post = ({
   createdAt,
   likeCount: _likeCount,
   isLiked: _isLiked,
+  likes,
   caption,
   location,
   user,
@@ -157,7 +158,7 @@ const Post = ({
             </Touchable>
           </IconContainer>
         </IconsContainer>
-        <Touchable>
+        <Touchable onPress={() => navigation.navigate('Likes', { likes })}>
           {likeCount === 1 ? (
             <Bold>1 like</Bold>
           ) : (
@@ -205,6 +206,15 @@ Post.propTypes = {
       }).isRequired,
     })
   ).isRequired,
+  likes: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      user: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+      }).isRequired,
+    })
+  ),
 };
 
 export default withNavigation(Post);

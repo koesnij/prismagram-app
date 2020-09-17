@@ -13,6 +13,9 @@ import NavIcon from '../components/NavIcon';
 import { stackStyles } from './config';
 import styles from '../styles';
 import UserDetail from '../screens/UserDetail';
+import Likes from '../screens/Likes';
+import Following from '../screens/Following';
+import Followers from '../screens/Followers';
 
 const stackFactory = (initialRoute, customConfig) =>
   createStackNavigator(
@@ -29,11 +32,29 @@ const stackFactory = (initialRoute, customConfig) =>
           title: 'Photo',
         },
       },
+      Likes: {
+        screen: Likes,
+        navigationOptions: {
+          title: 'Likes',
+        },
+      },
       UserDetail: {
         screen: UserDetail,
         navigationOptions: ({ navigation }) => ({
           title: navigation.getParam('username'),
         }),
+      },
+      Following: {
+        screen: Following,
+        navigationOptions: {
+          title: 'Following',
+        },
+      },
+      Followers: {
+        screen: Followers,
+        navigationOptions: {
+          title: 'Followers',
+        },
       },
     },
     {

@@ -22,7 +22,21 @@ const GET_USER = gql`
       isFollowing
       isSelf
       bio
+      following {
+        id
+        avatar
+        username
+        isSelf
+        isFollowing
+      }
       followingCount
+      followers {
+        id
+        avatar
+        username
+        isSelf
+        isFollowing
+      }
       followersCount
       postsCount
       posts {

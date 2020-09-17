@@ -27,6 +27,16 @@ const SEE_POST = gql`
         url
       }
       isLiked
+      likes {
+        id
+        user {
+          id
+          avatar
+          username
+          isSelf
+          isFollowing
+        }
+      }
       likeCount
       comments {
         id

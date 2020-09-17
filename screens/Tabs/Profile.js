@@ -18,10 +18,23 @@ export const ME = gql`
       avatar
       username
       fullName
-      isFollowing
       isSelf
       bio
+      following {
+        id
+        avatar
+        username
+        isSelf
+        isFollowing
+      }
       followingCount
+      followers {
+        id
+        avatar
+        username
+        isSelf
+        isFollowing
+      }
       followersCount
       postsCount
       posts {
