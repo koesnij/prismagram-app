@@ -6,7 +6,7 @@ import { TouchableOpacity, Image } from 'react-native';
 import constants from '../constants';
 
 const SquarePhoto = ({ navigation, files = [], id }) => (
-  <TouchableOpacity onPress={() => navigation.navigate('Detail', { id })}>
+  <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { id })}>
     <Image
       source={{ uri: files[0].url }}
       style={{

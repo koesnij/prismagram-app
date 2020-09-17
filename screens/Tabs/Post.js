@@ -9,6 +9,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import constants from '../../constants';
 import styles from '../../styles';
+import { withNavigation } from 'react-navigation';
 
 const Container = styled.View`
   background-color: white;
@@ -66,6 +67,7 @@ const TOGGLE_LIKE = gql`
 `;
 
 const Post = ({
+  navigation,
   id,
   createdAt,
   likeCount: _likeCount,
@@ -100,7 +102,11 @@ const Post = ({
     <Container>
       <Header>
         <HeaderColumn>
-          <Touchable>
+          <Touchable
+            onPress={() =>
+              navigation.navigate('UserDetail', { username: user.username })
+            }
+          >
             <Image
               style={{ height: 40, width: 40, borderRadius: 20 }}
               source={{ uri: user.avatar }}
@@ -108,7 +114,11 @@ const Post = ({
           </Touchable>
         </HeaderColumn>
         <HeaderColumn>
-          <Touchable>
+          <Touchable
+            onPress={() =>
+              navigation.navigate('UserDetail', { username: user.username })
+            }
+          >
             <Bold>{user.username}</Bold>
           </Touchable>
           <Touchable>
@@ -197,4 +207,4 @@ Post.propTypes = {
   ).isRequired,
 };
 
-export default Post;
+export default withNavigation(Post);
