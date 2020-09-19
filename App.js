@@ -17,6 +17,13 @@ import styles from './styles';
 import NavController from './components/NavController';
 import { AuthProvider } from './AuthContext';
 
+// HACK: Prevent "Expo pasted from CoreSimulator" notification from spamming continuously
+import { Clipboard } from 'react-native';
+if (__DEV__) {
+  Clipboard.setString('');
+}
+// HACK: Prevent "Expo pasted from CoreSimulator" notification from spamming continuously
+
 export default function App() {
   // 처음 컴포넌트를 로드했을 때, loaded는 false, client는 null이 됨
   const [loaded, setLoaded] = useState(false);
