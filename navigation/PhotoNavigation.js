@@ -1,3 +1,4 @@
+import React from 'react';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
 import SelectPhoto from '../screens/Photo/SelectPhoto';
@@ -6,6 +7,7 @@ import UploadPhoto from '../screens/Photo/UploadPhoto';
 import { createStackNavigator } from 'react-navigation-stack';
 import { stackStyles } from './config';
 import styles from '../styles';
+import { Button, Text } from 'react-native';
 
 const PhotoTabs = createMaterialTopTabNavigator(
   {
@@ -45,12 +47,28 @@ export default createStackNavigator(
   {
     Tabs: {
       screen: PhotoTabs,
-      navigationOptions: {
+      navigationOptions: ({ navigation }) => ({
         title: 'Choose Photo',
-        headerLeft: () => null,
+        headerLeft: () => '',
+        // headerRight: () => (
+        //   <Button
+        //     title="Next"
+        //     onPress={() => navigation.navigate('UploadPhoto')}
+        //   />
+        // ),
+      }),
+    },
+    Upload: {
+      screen: UploadPhoto,
+      navigationOptions: {
+        title: 'Upload',
       },
     },
-    UploadPhoto,
   },
-  { defaultNavigationOptions: { headerStyle: { ...stackStyles } } }
+  {
+    defaultNavigationOptions: {
+      headerStyle: { ...stackStyles },
+      headerTintColor: styles.blackColor,
+    },
+  }
 );

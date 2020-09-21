@@ -12,11 +12,11 @@ import styles from '../../styles';
 
 const View = styled.View`
   flex: 1;
-  justify-content: center;
+  background-color: white;
+  justify-content: space-between;
+  padding-bottom: 100px;
   align-items: center;
 `;
-
-const Text = styled.Text``;
 
 const Button = styled.View`
   width: 80px;
@@ -24,6 +24,7 @@ const Button = styled.View`
   border-radius: 40px;
   border: 15px solid ${styles.lightGreyColor};
 `;
+
 export default ({ navigation }) => {
   const cameraRef = useRef();
   const [canTakePhoto, setCanTakePhoto] = useState(true);
@@ -40,6 +41,7 @@ export default ({ navigation }) => {
         quality: 1,
       });
       const asset = await MediaLibrary.createAssetAsync(uri);
+      navigation.navigate('Upload', { photo: asset });
     } catch (e) {
       console.log(e);
       setCanTakePhoto(true);
