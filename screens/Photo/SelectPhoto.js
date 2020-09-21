@@ -27,7 +27,6 @@ export default () => {
       const [firstPhoto] = assets;
       setSelected(firstPhoto);
       setAllPhotos(assets);
-      console.log(photos);
     } catch (e) {
       console.log(e);
     } finally {
