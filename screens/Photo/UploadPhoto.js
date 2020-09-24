@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Image } from 'react-native';
 import styled from 'styled-components';
+import { ActivityIndicator, Alert, Image } from 'react-native';
+
+import axios from 'axios';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+import { FEED_QUERY } from '../Tabs/Home';
 
 import styles from '../../styles';
 import constants from '../../constants';
-import useInput from '../../hooks/useInput';
-import AuthButton from '../../components/AuthButton';
-import axios from 'axios';
 import options from '../../apollo';
+import useInput from '../../hooks/useInput';
 
+const UPLOAD = gql`
+  mutation upload($caption: String!, $files: [String!]!, $location: String!) {
+    upload(caption: $caption, files: $files, location: $location) {
+      id
+      caption
+      location
+    }
+  }
+`;
 const View = styled.View`
   flex: 1;
   background-color: white;
@@ -47,9 +59,17 @@ const Text = styled.Text`
 export default ({ navigation }) => {
   const [loading, setIsLoading] = useState(false);
   const [fileUrl, setFileUrl] = useState('');
+  const photo = navigation.getParam('photo');
   const captionInput = useInput('');
   const locationInput = useInput('');
-  const photo = navigation.getParam('photo');
+  const [uploadMutation] = useMutation(UPLOAD, {
+    variables: {
+      caption: captionInput.value,
+      location: locationInput.value,
+      files: [fileUrl],
+    },
+    refetchQueries: () => [{ query: FEED_QUERY }],
+  });
   const handleSubmit = async () => {
     if (captionInput.value === '' || locationInput.value === '') {
       Alert.alert('All fields are required.');
@@ -59,14 +79,23 @@ export default ({ navigation }) => {
     const [, type] = name.split('.');
     formData.append('file', { name, type: type.toLowerCase(), uri: photo.uri });
     try {
+      setIsLoading(true);
       const {
-        data: { path },
+        data: { location },
       } = await axios.post(`${options.uri}/api/upload`, formData, {
         headers: { 'content-type': 'multipart/form-data' },
       });
-      setFileUrl(path);
+      setFileUrl(location);
+      const {
+        data: { upload },
+      } = await uploadMutation();
+      if (upload.id) {
+        navigation.navigate('TabNavigation');
+      }
     } catch (error) {
       Alert.alert('Cannot Upload', 'Try later.');
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
