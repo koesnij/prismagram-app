@@ -1,5 +1,5 @@
-import React from 'react';
-import { ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { RefreshControl, ScrollView } from 'react-native';
 import { gql } from 'apollo-boost';
 import styled from 'styled-components';
 
@@ -71,9 +71,24 @@ export default () => {
   const handler = () => {
     logOut();
   };
-  const { loading, data } = useQuery(ME);
+  const { loading, data, refetch } = useQuery(ME);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await refetch();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {loading ? <Loader /> : data && data.me && <UserProfile {...data.me} />}
       <AuthButton onPress={handler} text="Log Out" />
     </ScrollView>
