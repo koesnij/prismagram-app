@@ -63,12 +63,7 @@ export default ({ navigation }) => {
   const captionInput = useInput('');
   const locationInput = useInput('');
   const [uploadMutation] = useMutation(UPLOAD, {
-    variables: {
-      caption: captionInput.value,
-      location: locationInput.value,
-      files: [fileUrl],
-    },
-    refetchQueries: () => [{ query: FEED_QUERY }],
+    refetchQueries: () => [{ query: FEED_QUERY }], // 게시글 올린 후 피드 새로고침(쿼리 요청)
   });
   const handleSubmit = async () => {
     if (captionInput.value === '' || locationInput.value === '') {
@@ -85,10 +80,15 @@ export default ({ navigation }) => {
       } = await axios.post(`${options.uri}/api/upload`, formData, {
         headers: { 'content-type': 'multipart/form-data' },
       });
-      setFileUrl(location);
       const {
         data: { upload },
-      } = await uploadMutation();
+      } = await uploadMutation({
+        variables: {
+          files: [location],
+          caption: captionInput.value,
+          location: locationInput.value,
+        },
+      });
       if (upload.id) {
         navigation.navigate('TabNavigation');
       }
